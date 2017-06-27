@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Introduction</title>
+	<link rel="stylesheet" type="text/css" href="text.css">
+</head>
+
+<body>
+
+<section>
+<hr>
+<h1>Introduction</h1>
+<p class="first">
+Loren Ipsum.
+</p>
+</section>
+
+<section>
+<h2>Organization</h2>
+<p class="first">
+This book is partitioned into five sections although, like any text, if you
+read it serially you will find these demarcations rather arbitrary and fluid.
+I hope that you find this text at a moment in your learning where it makes sense
+to read it serially through, plus refering to previous sections.
+I found pleasure and knowledge in writing it this way.
+</p>
+
+<p> Part one (I) describes a taxonomy of ideas in logic and computing language,
+such as symbols, values, functions, objects, etc.
+I don't claim any of these ideas to be my own&mdash;many come from
+other programming languages and the literature of great programmers before me:
+Stepanov, TAOCP, Dijkstra, Helithy, Ritchie, Kernigan, Thomson, McCarthy, Watson, Moore, etc.
+Neither are they comprehensive&mdash;indeed fewer ideas may be more comprehendable, but
+they are needed for understanding the rest of the language in this book.
+Care is taken to define ideas as specifically as possible for Ad1 but such that
+there is no conflict with generally accepted definitions elsewhere.
+This section, and sometimes the Ad1 language itself, is called the ``Adstract Machine''.
+</p>
+
+<p> Part two (II) describes the computers Ad1 can be used to program, which are those
+with sequential processors and digital memory, and optionally additional
+random access memory with load/store capabilities. This section is called the
+``Concrete Machine'' and it describes the subset of Ad1 which has nearly 1-to-1
+correspondence with features of C. The model of programming is block-structured
+and procedural-programming where variables are declared with types and scope
+information and operated upon by sequences of operations in blocks or procedures.
+</p>
+
+<p> Part three (III) begins to describe the Ad1 standard library, in particular
+libraries with functionality similar to the C standard libraries and libraries
+which use transactional/object-oriented programming style.
+Variadic procedures, standard input and output streams, the string library,
+dynamic memory allocation, digital math, time, etc. are all described here.
+</p>
+
+<p> Part four (IV) introduces generic programming for writing algorithms and data
+structures that are composible and reusable. It is more or less equivalent to
+the C++ Standard Template Library and draws liberally from Elements of Programming
+and TAOCP Algorithms and Data Structures.
+</p>
+
+<p> Part five (V) specifies the base state of the Ad1 language and describes
+how the compiler and compilation can be expanded and partitioned, allowing
+the programmer to grow the language and control compilation
+effects and times. The syntax and semantics of Ad1 are not a simple as Lisp
+or Smalltalk, but hopefully it is simple enough.
+Custom procedures can be added into the
+``Adstract Machine'' for parsing, AST manipulation, text manipulation, etc.
+Objects in the compiler are transparent and are built up from the standard libraries
+in parts III and IV.
+</p>
+
+<hr class="thought-divider">
+
+<p> In this organization, you can see my own understanding of
+programming language evolve. Part (I) provides a smattering of Lispy and
+rigourous ideas which won't make sense at first but have been painstakingly defined
+and refined by others.
+In part (II) one can glimpse C behind Ad1's veneer. In part (III) one can see C's
+standard libraries but also the difficulties of writing them in C&mdash;probably
+one of Stroustrup's insights for C++. In part (IV) we have my own opinionated,
+possibly naive version of Stepanov's C++ STL, and in part (V) the base compiler and
+its Lisp-inspired scriping language is implemented as the prime test case
+for the standard libraries' algorithms and data structures, assuming a Von Neuman machine.
+</p>
+
+<p> Ad1 keeps C's build system (compile, link, load, calling conventions, etc.) and name
+scoping and, like C, Ad1 does not build-in higher level constructs which obscure
+stack control flow (RAII, exceptions, anonymous functions, etc.).
+There is genius in C and hopefully Ad1 keeps that kernel of genius.
+Ad1 ``improves'' on C by replacing the text substitution preprocessor and by
+by adding functionality like C++'s type templates and type concepts
+needed for generic programming.
+</p>
+
+<p> Ad1 is also inspired by C++ and Lisp and their libraries and top-levels.
+Compared to C++, the base language is smaller and symbol usage is more uniform
+and fully customizable by the user. There are not explicit ``class'' constructs but
+object-oriented programming is an easy pattern with infix notation and linear types.
+Compared to Lisp, Ad1 has infix operators, a wider variety of brackets,
+a greater emphasis on compilation and target machine procedures,
+but unfortunately a more complex syntax and semantics which must be understood before
+extending the language.
+</p>
+</section>
+
+</body>
+</html>

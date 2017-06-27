@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Abstract Grammar of Ad1</title>
+	<link rel="stylesheet" type="text/css" href="text.css">
+</head>
+
+<body>
+
+<section>
+<hr>
+<h1>On the Grammar of Ad1</h1>
+<p class="chapter-first">
+Following the Linux ELF format for linkable machine code,
+symbols may be any length of any characters terminated by the null
+character; no characters are special besides that zero.
+All symbols and symbol classes in the language are defined in its
+current state. The base state includes script operators for adding
+new symbols, new symbol classes, and even new parsing precedences.
+</p>
+<p class="chapter-second">
+
+</p>
+<p class="blockquote">
+"Why are they going to disappear him?"<br>
+"I don't know. It doesn't make sense. It isn't even good grammar."
+<a class="blockquote-citation">&mdash;Joseph Heller, Catch-22</a>
+</p> 
+
+</section>
+
+<section>
+<h2>Expression Trees</h2>
+<p class="section-first">
+The goal the parser is to convert program text to a binary token tree,
+which can then be compared for equality, substituted, manipulated, 
+and evaluated in subsequent stages of compilation.
+Parsing is concerned with symbols, syntax, and inflection;
+i.e. with recognizing temporal spacing, relative order, and function
+of symbols in text. It is not concerned with semantics, or meaning of
+symbols to the audience. For example,
+<span class="spanquote">``Denial ain't just a river in Egypt''</span> is syntactically correct despite making no sense because 
+<span class="spanquote">``denial''</span> is a noun, if not the
+right one.
+</p>
+<p>The parsing algorithm iterates a global cursor through program
+script and builds the token tree by recursively applying parse procedures
+as operator symbols are encountered.
+An operator symbol may be overloaded by <span>if-statements</span>
+within its parse procedure, based on bounded number of nearby tokens.
+Parse procedures have access to the compiler's symbol tables, other global
+state like current namespace, and local context of (possibly) a prior
+token and the next token, as returned by a recursively called parse procedure.
+Thus the parser has a stack, a finite context around the cursor,
+and likely state machines implemented in parse procedures,
+and it is said to have a <em><span>context-sensitive</span> grammar</em>
+in the Chomsky heirarchy.
+<p>
+A sentence, or an expression, is a string of symbols, arranged
+logically in a heirarchial tree structure according to the language's
+grammar. A <em>grammar</em> consists of inflection and syntax;
+<em>inflection</em> is how symbols and expressions
+encountered in the language are classified, those species and genera
+such as nouns, verbs, subjects, verb predicates, declarative sentence,
+etc.
+And <em>syntax</em> is the structure by which <em>tokens</em> of these
+classes may appear in parse trees.
+</p>
+<p> At any moment there are a finite number of symbols that are known
+in the language. The compiler maintains an alphabetized symbol
+table&mdash;a dictionary&mdash;as part of its global state.
+A character string that is not yet in the symbol table is classed a
+<em>lexeme</em>. During lexical analysis, the ``is an element of?''
+question of sets is the important one: is this substring of program
+text a known symbol?
+</p>
+<p> Again, an <em>expression</em> is a concatenation of identifiers
+and operators, arranged logically in a heirarchial tree structure such
+that identified entities are child nodes and operations are parent
+nodes. An <em>identifier</em> names an entity and an <em>operator</em>
+names an abstract function or concrete procedure to be applied to its
+child entities&mdash;and this application is called
+<em>evaluation</em>. When an operator node is evaluated it becomes a
+new entity, named or unnamed, which can in turn be consumed by its
+own parent operation.
+</p>
+<p> Expressions unambiguosly specify the order and arguements of
+operations, and expressions in canonical form can
+be compared for equality, substituted, manipulated, and deserialized
+and serialized to textual forms (namely written Ad1 and Assembly).
+In Ad1, expression trees are all realized as binary token trees.
+Token structs have a name string plus additional grammatical
+information, such as operator or identifier and
+operator/identifer class.
+</p>
+<p> The grammatical classes of tokens and their syntax are
+described in an Extended Backus-Naur Form. A vertical bar indicates
+``exclusive or'', parenthesis are used transparently for grouping,
+and adjacent token classes or groupings separated by a space
+indicate concatenation of those token classes in the program's text
+form. Epsilon indicate the empty token/empty lexeme string.
+</p>
+<pre>
+   expression = recursive_exp | cast_exp | implicit_exp | identifier
+   identifier = known_entity | lexeme
+
+recursive_exp = inflex_arg recursive_exp tuple_arg
+    tuple_arg = expression
+   inflex_arg = exp_list
+
+     exp_list = &epsilon; | expression | (exp_list list_op expression)
+
+     cast_exp = (&epsilon; | expression) open_op exp_list close_op
+ implicit_exp = expression half_op expression
+</pre>
+
+<p> An expression may be either one of three expression types;
+recursive, cast, or implicit, or trivially just an identifier.
+Usually identifiers indicate a previously known entity.
+However, to allow the declaration of new entities, an identifier
+may also be a lexeme, which is an unclassified character string.
+</p>
+<p> Recursive expressions are the most common form, consisting of
+a variable length, inflective arguement on the left, an operator
+placed as the parent node, and followed by a single expression
+to be placed as the right child arguement. The parser reads Ad1 
+and hangs and classifies tokens from left-to-right and bottom-up,
+but the inflex_arg may not be fully classified until the reflexive
+operator is encountered.
+</p>
+<p> The inflex_arg may vary in length as it is a list of expressions.
+An expression list is defined recursively using a subset of
+recursive operators more specifically called list operators.
+Expression lists can be empty or infinitely long, but the parsing and
+evaluation of any individual operation is bounded because programs are
+parse left-to-right and the right arguement following a recursive
+operation always has a length of one expression.
+</p>
+<p> Cast expressions limit the length of an expression list by
+delimiting with an open operator and a close operator. A list of
+finite length is called a <em>tuple</em>. An optional prefix
+expression placed as the left child helps describe the tuple's
+type. A combination of open and close operators form the parent node,
+and the interior list is hung as the right child.
+</p>
+<p> Finally, implicit expressions are provided for convenience when
+an operation could be infered from the semantic types of two adjacent
+expressions or when the desired operation is a no-op. Common
+use cases are the removal of whitespace no-ops or multiplication of
+adjacent number expressions.
+Lexical separator operators are only ``half operators''; they form
+superset of the open and close operators from cast expressions but
+are not paired. The typically affect only lexing and probably have
+no semantics or evaluation procedures associated with them.
+</p>
+
+<hr class="thought-divider">
+</section>
+
+</body>
+</html>
