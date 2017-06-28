@@ -14,6 +14,18 @@ Wchar* ustr_get_str(const ustr *userspace_str) {
     return (Wchar*) ptr;
 }
 
+rvec ustr_get_rvec(const ustr* userspace_str) {
+    rvec retvec;
+    retvec.zero = (Nint)userspace_str->str & STRING_PTR_MASK;
+    if (retvec.zero)
+        retvec.nth = userspace_str->rend_offset.rend;
+    else {
+        retvec.zero = (Nint)userspace_str + sizeof(*userspace_str);
+        retvec.nth = retvec.zero - userspace_str->ustr.status;
+    }
+    return retvec;
+}
+
 ustr c2ustr(const char* cstr) {
     ustr nustr;
     Wint len = 0;
@@ -24,7 +36,7 @@ ustr c2ustr(const char* cstr) {
     while (--i && cursor[0]);
     if (!cursor[0]) {
         nustr.str = 0; // Null
-        nustr.ustr.status = -len; // Negative changes Wint -> Nint
+        nustr.ustr.status = len; // Negative changes Wint -> Nint
     }
     else {
         while(cstr[len++]);
@@ -36,10 +48,10 @@ ustr c2ustr(const char* cstr) {
             exit(EXIT_FAILURE);
         }
         r2l_memcpy((Nint)cursor, (Wint)cstr, len);
-        nustr.rend_offset.rend = (Nint) cursor + len; ;
         nustr.str = (Wchar*) cursor;
         nustr.ustr.status = alloc_size;
-    }
+        nustr.rend_offset.rend = ((Nint) cursor) + len;
+   }
     return nustr;
 }
 

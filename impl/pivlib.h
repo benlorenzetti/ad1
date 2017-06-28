@@ -8,6 +8,11 @@ typedef intptr_t Zint;
 typedef uintptr_t Nint;
 typedef unsigned char Wchar;
 
+typedef struct rvec {
+    Nint nth;
+    Nint zero;
+} rvec;
+
 Wchar log2floor(Nint);
 Wchar log2ceil(Nint);
 Nint power2N(Wchar);

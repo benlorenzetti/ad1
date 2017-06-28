@@ -45,6 +45,7 @@ typedef union ustr {
 
 ustr c2ustr(const char *);
 Wchar* ustr_get_str(const ustr *);
+rvec ustr_get_rvec(const ustr *);
 void ustr_free(ustr);
 void strclear(ustr *);
 
