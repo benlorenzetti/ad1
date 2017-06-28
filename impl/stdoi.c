@@ -74,16 +74,24 @@ int oi_fprintf(FILE* stream, const cstr* fmt, ...) {
         char bufr[STDOI_CONVERSION_BUFFER_SIZE];
         char* bufl = &bufr[STDOI_CONVERSION_BUFFER_SIZE];
         int buf_space = STDOI_CONVERSION_BUFFER_SIZE;
-        Wchar *str, *bufptr_l, *bufptr_r;
+        Wchar *bufptr_l, *bufptr_r;
         double generic_data[4] = {0,0,0,0};
+        if(conspec.conversion_char == 'S') {
+            ustr arg = (ustr) va_arg(args, ustr);
+            Wchar* str = ustr_get_str(&arg);
+            bufptr_r = bufptr_l = bufl;
+            do {
+                *(--bufptr_r) = *(--str);
+            } while(--buf_space && *str);
+        }
+        else if(conspec.conversion_char == 's') {
+            Wchar* str = (Wchar*) va_arg(args, Wchar*);
+            bufptr_r = bufptr_l = bufl;
+            do *(--bufptr_r) = *(--str);
+            while (--buf_space && *str);
+        }
         switch(conspec.conversion_char) {
-            case 's':
-                str = (Wchar*) va_arg(args, Wchar*);
-                str = (Wchar*)(((Wint)str) & STRING_PTR_MASK);
-                bufptr_r = bufptr_l = bufl;
-                do {
-                    *(--bufptr_r) = *(--str);
-                } while(--buf_space && *str);
+            case 'S':; case 's':
             break;
             case 'd':; case 'i':
                 // For integers, switch on object type sizes
@@ -174,7 +182,7 @@ int oi_fprintf(FILE* stream, const cstr* fmt, ...) {
  *            \          |    |          |            |           /
  *             \         |    |          |            |          /
  *         [7],.Y........V....V..........V............V.........Y.,
- *            :  d, i, x, X, u, c, s, f, e, E, g, G, p, n, N, %   :
+ *            : d, i, x, X, u, c, s, S, f, e, E, g, G, p, n, N, % :
  *            :           Terminal Conversion Character           :
  *            '''''''''''''''''''''''''''''''''''''''''''''''''''''
 */
@@ -201,7 +209,7 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
             case 'd':; case 'i':; case 'x':; case 'X':; case 'u':;
             case 'c':; case 's':; case 'f':; case 'e':; case 'E':;
             case 'g':; case 'G':; case 'p':; case 'n':; case 'N':;
-            case '%':
+            case '%':; case 'S':
                 goto State_Seven;
             default:
                 break; /* error handle */
@@ -237,7 +245,7 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
             case 'd':; case 'i':; case 'x':; case 'X':; case 'u':;
             case 'c':; case 's':; case 'f':; case 'e':; case 'E':;
             case 'g':; case 'G':; case 'p':; case 'n':; case 'N':;
-            case '%':
+            case '%':; case 'S':
                 loop_count = 0; goto State_Seven;
             default:
                 break; /* error handle */   
@@ -258,7 +266,7 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
             case 'd':; case 'i':; case 'x':; case 'X':; case 'u':;
             case 'c':; case 's':; case 'f':; case 'e':; case 'E':;
             case 'g':; case 'G':; case 'p':; case 'n':; case 'N':;
-            case '%':
+            case '%':; case 'S':
                 loop_count = 0; goto State_Seven;
             default:
                 break; /* error handle */   
@@ -275,7 +283,7 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
             case 'd':; case 'i':; case 'x':; case 'X':; case 'u':;
             case 'c':; case 's':; case 'f':; case 'e':; case 'E':;
             case 'g':; case 'G':; case 'p':; case 'n':; case 'N':;
-            case '%':
+            case '%':; case 'S':
                 goto State_Seven;
             default:
                 break; /* error handle */   
@@ -308,7 +316,7 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
             case 'd':; case 'i':; case 'x':; case 'X':; case 'u':;
             case 'c':; case 's':; case 'f':; case 'e':; case 'E':;
             case 'g':; case 'G':; case 'p':; case 'n':; case 'N':;
-            case '%':
+            case '%':; case 'S':
                 loop_count = 0; goto State_Seven;
             default:
                 printf("State 5 default error\n");

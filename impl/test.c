@@ -31,9 +31,11 @@ int main() {
 
     // Test c2ustr() constructor and sfree() destructor
     ustr str3;
-    c2ustr(&str3, "xyz");
-    oi_fprintf(stdout, "c2ustr(\"xyz\") = %s\n", str3.str);
-    c2ustr(&str3, "1234567890");
-    oi_fprintf(stdout, "c2ustr(\"1234567890\") = %s\n", str3.str);
-    sfree(&str3);
+    str3 = c2ustr("xyz");
+    Wchar* ptr = (Wchar*)&str3;
+    oi_fprintf(stdout, "c2ustr(\"xyz\") = %S\n", str3);
+    ustr_free(str3);
+    str3 = c2ustr("1234567890");
+    oi_fprintf(stdout, "c2ustr(\"1234567890\") = %S\n", str3);
+    ustr_free(str3);
 }

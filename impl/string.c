@@ -6,18 +6,25 @@
 
 #include "stdoi.h" // temp debug
 
-int c2ustr(ustr* nustr, const char* cstr) {
-    sfree(nustr);
+Wchar* ustr_get_str(const ustr *userspace_str) {
+    Nint ptr;
+    ptr = (Nint)userspace_str->str & STRING_PTR_MASK;
+    if (!ptr)
+        ptr = (Nint)userspace_str + sizeof(*userspace_str);
+    return (Wchar*) ptr;
+}
+
+ustr c2ustr(const char* cstr) {
+    ustr nustr;
     Wint len = 0;
-    Nint i = sizeof(nustr->ustr.span);
-    Wchar* cursor = (Wchar*)(nustr) + STRING_USTR_HDR_SIZE;
+    Nint i = sizeof(nustr.ustr.span);
+    Wchar* cursor = (Wchar*)(&nustr) + sizeof(nustr);
     if (cstr)
-    do {
-        *(--cursor) = cstr[len++];
-    } while (--i && cursor[0]);
+    do *(--cursor) = cstr[len++];
+    while (--i && cursor[0]);
     if (!cursor[0]) {
-        nustr->str = (Wchar*)(nustr) + sizeof(*nustr);
-        nustr->ustr.status = -len; // Negative changes Wint -> Nint
+        nustr.str = 0; // Null
+        nustr.ustr.status = -len; // Negative changes Wint -> Nint
     }
     else {
         while(cstr[len++]);
@@ -26,21 +33,20 @@ int c2ustr(ustr* nustr, const char* cstr) {
         cursor = (Wchar*) left_geomalloc(alloc_size);
         if(!cursor) {
             printf("geomalloc failure in c2ustr(%s)\n", cstr);
-            return -1;
+            exit(EXIT_FAILURE);
         }
         r2l_memcpy((Nint)cursor, (Wint)cstr, len);
-        nustr->len_offset.len = len;
-        nustr->str = (Wchar*) cursor;
-        nustr->ustr.status = alloc_size;
+        nustr.rend_offset.rend = (Nint) cursor + len; ;
+        nustr.str = (Wchar*) cursor;
+        nustr.ustr.status = alloc_size;
     }
-    return 1;
+    return nustr;
 }
 
-void sfree(ustr* string) {
-    Wint str = (Wint)string->str & STRING_PTR_MASK;
-    if(str != ((Wint)string + sizeof(*string))) {
-        left_geofree((Nint)str, string->ustr.status);
-    }
+void ustr_free(ustr string) {
+    Wint str = (Wint)string.str & STRING_PTR_MASK;
+    if(str)
+        left_geofree((Nint)str, string.ustr.status);
 }
 
 

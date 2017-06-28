@@ -33,18 +33,19 @@ typedef struct ustruct {
 
 typedef struct ustr_farlen {
     Wchar padding[STRING_USTR_LEN_OFFSET];
-    Nint len;
-} ustr_len_offset;
+    Nint rend;
+} ustr_rend_offset;
 
 typedef union ustr {
     Wchar* str;
     ustruct ustr;
     char bytes[STRING_USTR_HDR_SIZE];
-    ustr_len_offset len_offset;
+    ustr_rend_offset rend_offset;
 } ustr;
 
-int c2ustr(ustr *, const char *);
-void sfree(ustr *);
+ustr c2ustr(const char *);
+Wchar* ustr_get_str(const ustr *);
+void ustr_free(ustr);
 void strclear(ustr *);
 
 #endif
