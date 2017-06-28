@@ -5,6 +5,8 @@
 #include <stdint.h>
 
 int main() {
+    STRING_MAIN_ASSERT();
+
     Nint testptr = 0;
     printf("Max unsigned pointer value = %lu\n", UINTPTR_MAX);
     printf("              uintptr_test = %lu\n", testptr -1);
@@ -28,7 +30,10 @@ int main() {
     oi_fprintf(stdout, "string test = %s, int test = %d\n", str2, 27); 
 
     // Test c2ustr() constructor and sfree() destructor
-    ustr str3 = c2ustr("123456789");
+    ustr str3;
+    c2ustr(&str3, "xyz");
     oi_fprintf(stdout, "c2ustr(\"xyz\") = %s\n", str3.str);
-    sfree(str3);
+    c2ustr(&str3, "1234567890");
+    oi_fprintf(stdout, "c2ustr(\"1234567890\") = %s\n", str3.str);
+    sfree(&str3);
 }

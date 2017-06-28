@@ -82,7 +82,7 @@ int oi_fprintf(FILE* stream, const cstr* fmt, ...) {
                 str = (Wchar*)(((Wint)str) & STRING_PTR_MASK);
                 bufptr_r = bufptr_l = bufl;
                 do {
-                    *bufptr_r-- = *str--;
+                    *(--bufptr_r) = *(--str);
                 } while(--buf_space && *str);
             break;
             case 'd':; case 'i':

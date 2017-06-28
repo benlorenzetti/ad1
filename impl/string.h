@@ -2,6 +2,8 @@
 #define STRING_H
 
 #include "pivlib.h"
+#include <stdlib.h>
+#include <stdio.h>
 
 #define STRING_PTR_SIZE 6
 #define STRING_USTR_HDR_SIZE 16
@@ -41,8 +43,8 @@ typedef union ustr {
     ustr_len_offset len_offset;
 } ustr;
 
-ustr c2ustr(const char *);
-void sfree(ustr);
+int c2ustr(ustr *, const char *);
+void sfree(ustr *);
 void strclear(ustr *);
 
 #endif
