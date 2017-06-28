@@ -1,7 +1,7 @@
-#include <stdint.h>
-#include <assert.h>
-#include <stdlib.h>
+#ifndef PIVLIB_H
+#define PIVLIB_H
 
+#include <stdint.h>
 
 typedef uintptr_t Wint;
 typedef intptr_t Zint;
@@ -10,53 +10,15 @@ typedef unsigned char Wchar;
 
 Wchar log2floor(Nint);
 Wchar log2ceil(Nint);
-Nint power2(Wchar);
+Nint power2N(Wchar);
+Wint power2W(Wchar);
 Nint geomalloc(Wchar);
+Nint left_geomalloc(Wchar);
 void geofree(Nint, Wchar);
-Nint memcpy(Nint, Nint, Nint);
+void left_geofree(Nint, Wchar);
 Nint NfromW(Wint);
+Nint memcpy(Nint, Nint, Nint);
+Nint r2l_memcpy(Nint, Wint, Nint);
 
-Nint NfromW(Wint w) {
-    return -w;
-}
+#endif
 
-Nint memcpy(Nint dest, Nint src, Nint length) {
-    assert( !(dest < src && dest >= (src+length)));
-    Wchar* dest_ptr = (Wchar*) dest;
-    Wchar* src_ptr = (Wchar*) src;
-    while(length++)
-        *(--dest_ptr) = *(--src_ptr);
-    return dest;
-}
-
-Nint geomalloc(Wchar power) {
-    return (Nint)malloc(power2(power));
-}
-
-void geofree(Nint rend, Wchar power) {
-    free((void*) rend);
-}
-
-Wchar log2floor(Nint n) {
-    Wint w = -n;
-    Wchar rot_count = -1;
-    while(w)
-        w /= 2, rot_count++;
-    return rot_count;
-}
-
-Wchar log2ceil(Nint n) {
-    Wchar floor = log2floor(n);
-    if(n == power2(floor))
-        return floor;
-    else
-        return 1 + floor;
-}
-
-Nint power2(Wchar n) {
-    assert(n < 8*((Wchar)sizeof(Nint)));
-    if(n < 0)
-        return 0;
-    else
-        return -(1 << n);
-}

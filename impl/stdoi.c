@@ -1,4 +1,7 @@
 #include "stdoi.h"
+#include "string.h"
+#include <stdarg.h>
+#include <stdlib.h>
 
 #define STDOI_UNIMPLEMENTED() \
 do { \
@@ -71,11 +74,12 @@ int oi_fprintf(FILE* stream, const cstr* fmt, ...) {
         char bufr[STDOI_CONVERSION_BUFFER_SIZE];
         char* bufl = &bufr[STDOI_CONVERSION_BUFFER_SIZE];
         int buf_space = STDOI_CONVERSION_BUFFER_SIZE;
-        char *str, *bufptr_l, *bufptr_r;
+        Wchar *str, *bufptr_l, *bufptr_r;
         double generic_data[4] = {0,0,0,0};
         switch(conspec.conversion_char) {
             case 's':
-                str = va_arg(args, char*);
+                str = (Wchar*) va_arg(args, Wchar*);
+                str = (Wchar*)(((Wint)str) & STRING_PTR_MASK);
                 bufptr_r = bufptr_l = bufl;
                 do {
                     *bufptr_r-- = *str--;
@@ -337,5 +341,3 @@ struct stdoi_conspec stdoi_parse_conspec(char **cursor_ptr) {
         *cursor_ptr = cursor;
         return conversion_spec;
 }
-
-
