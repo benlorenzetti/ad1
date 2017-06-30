@@ -4,7 +4,11 @@
 #include <stdio.h> // temp debug
 
 Nint left_geomalloc(Wchar power) {
-    return (Nint)malloc(1 << power) + (1 << power);
+    Wint bytes = 1 << power;
+
+    Nint lptr = (Nint)malloc(bytes) + bytes;
+    printf("left_geomalloc() %ld bytes at %ld\n", bytes, lptr);
+    return lptr;
 }
 
 Nint memcpy(Nint dest, Nint src, Nint length) {
@@ -16,13 +20,14 @@ Nint memcpy(Nint dest, Nint src, Nint length) {
     return (Nint) dest_ptr;
 }
 
-Nint r2l_memcpy(Nint dest, Wint src, Nint len) {
-    assert((dest - src) < len);
-    Wchar* dest_ptr = (Wchar*) dest;
-    Wchar* src_ptr = (Wchar*) src;
-    while(len++)
-        *(--dest_ptr) = *(src_ptr++);
-    return (Nint) dest_ptr;
+Nint r2l_memcpy(Nint dest, Wint src, Wint obj_count, Wint obj_size) {
+    assert((dest - src) > obj_count * obj_size);
+    Nint dest_ptr = dest;
+    do {
+        src += obj_size;
+        dest_ptr = memcpy(dest_ptr, src, -obj_size);
+    } while (--obj_count);
+    return dest_ptr;
 }
 
 
@@ -39,15 +44,18 @@ void geofree(Nint rend, Wchar power) {
 }
 
 void left_geofree(Nint lend, Wchar power) {
-    lend -= (1 << power);
-    free((void*) lend);
+    Wint bytes = 1 << power;
+    Nint rend = lend - bytes;
+    printf("  left_geofree() %ld bytes at %ld\n", bytes, lend);
+    free((void*) rend);
 }
 
 Wchar log2floor(Nint n) {
-    Wint w = -n;
+    assert(n);
+    n = ~n;
     Wchar rot_count = -1;
-    while(w)
-        w /= 2, rot_count++;
+    do n = n >> 1, rot_count++;
+    while(n);
     return rot_count;
 }
 
@@ -60,11 +68,19 @@ Wchar log2ceil(Nint n) {
 }
 
 Nint power2N(Wchar n) {
-    assert(n < 8*((Wchar)sizeof(Nint)));
-    if(n < 0)
-        return 0;
-    else
-        return -(1 << n);
+    assert(n <= 8*sizeof(Nint));
+    if(n == 8*sizeof(Nint))
+        return 0;   // This if should not be necessary
+                    // but it protects against compilers doing
+                    // a modulo rotate.
+    return (Nint)(-(1 << n));
 }
 
-
+Wint power2W(Wchar n) {
+    assert(n <= 8*sizeof(Nint));
+    if(n == 8*sizeof(Nint))
+        return 0;   // This if should not be necessary
+                    // but it protects against compilers doing
+                    // a modulo rotate.
+    return (Wint)(1 << n);
+}

@@ -3,6 +3,29 @@
 #include <assert.h>
 #include <stdio.h> // temp?
 
+rvec array_partback(array* arr, Nint part_size) {
+    assert(part_size);
+    rvec empty_part;
+    Wint arr_size = power2W(arr->power);
+    Nint arr_len = arr->nth - arr->zero;
+    Nint req_len = arr_len + part_size;
+printf("partback() arr_size = %ld, arr_len = %ld, req_len = %ld\n", arr_size, -arr_len, -req_len);
+    if(arr_size < -req_len) {
+        array new_lvec;
+        new_lvec.power = log2ceil(req_len);
+        new_lvec.zero = left_geomalloc(new_lvec.power);
+        empty_part.zero = memcpy(new_lvec.zero, arr->zero, arr_len);
+        arr->nth = empty_part.nth = empty_part.zero + part_size;
+        arr->zero = new_lvec.zero;
+        arr->power = new_lvec.power;
+        return empty_part;
+    } else {
+        empty_part.zero = arr->nth;
+        arr->nth = empty_part.nth = empty_part.zero + part_size;
+        return empty_part;
+    }
+}
+
 int rvec_cmp(const rvec vec1, const rvec vec2,
     size_t inc_size, int(*cmp)(const Nint, const Nint)
 ) {

@@ -23,7 +23,8 @@ void geofree(Nint, Wchar);
 void left_geofree(Nint, Wchar);
 Nint NfromW(Wint);
 Nint memcpy(Nint, Nint, Nint);
-Nint r2l_memcpy(Nint, Wint, Nint);
+Nint r2l_memcpy(Nint, Wint, Wint, Wint);
+//   r2l_memcpy(dest, src, obj_count, obj_size) = rend of dest
 
 #endif
 

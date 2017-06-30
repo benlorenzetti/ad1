@@ -1,3 +1,7 @@
+body {
+    text-indent: 4em;
+    text-align: justify;
+}
 section {
 	font-family: "Times New Roman", Times, serif;
 	font-size: 12pt;
@@ -7,16 +11,13 @@ section {
 /* Headings 1-3 are probably meaningful and use sans-serif font
  * to differentiate it from the serif body. Heading 6 is basically
  * a way to bold text. */
-h1, h2, h3, h4, h5 {
+h1, h2, h3, h4, h5, h6 {
 	font-family: sans-serif;
+    text-indent: 0;
 }
 h1 { font-size: 18pt; margin-top: 0.25em; margin-bottom: 1.75em; padding: 0;}
 h2 { font-size: 14pt; }
 h6 { font-size: 12pt; margin-top: 1em; margin-bottom: 0.5em; }
-
-p {
-	text-indent: 4em;
-}
 
 p.chapter-first {
   text-indent: 0;
@@ -34,6 +35,12 @@ p.section-first {
 	text-indent: 0;
 }
 
+ol {
+    text-indent: 0;
+    margin-left: 4em;
+    margin-right: 12em;
+}
+
 hr {
 	margin-bottom: 0;
 	padding-bottom: 0;
@@ -46,8 +53,15 @@ hr.thought-divider {
 
 p.blockquote {
   text-indent: 0;
-  margin-left: 4em;
+  margin-left: 12em;
   margin-right: 4em;
+}
+
+div.long-blockquote {
+    text-indent: 0;
+    margin-left: 4em;
+    margin-right: 4em;
+    font-style: italic;
 }
 
 a.blockquote-citation {

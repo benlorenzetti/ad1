@@ -47,7 +47,7 @@ ustr c2ustr(const char* cstr) {
             printf("geomalloc failure in c2ustr(%s)\n", cstr);
             exit(EXIT_FAILURE);
         }
-        r2l_memcpy((Nint)cursor, (Wint)cstr, len);
+        r2l_memcpy((Nint)cursor, (Wint)cstr, -len, 1);
         nustr.str = (Wchar*) cursor;
         nustr.ustr.status = alloc_size;
         nustr.rend_offset.rend = ((Nint) cursor) + len;

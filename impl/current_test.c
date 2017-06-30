@@ -4,6 +4,8 @@
 #include "pivlib.h"
 #include "array.h"
 
+#define TEST_ARRAY_SIZE 5
+
 int char_compare(Nint a, Nint b) {
 //    Wchar* aptr = (Wchar*)a;
 //    Wchar* bptr = (Wchar*)b;
@@ -36,4 +38,14 @@ int main() {
     ustr_free(string1);
     ustr_free(string2);
 
+    array ar1 = {0,0,64};
+    int input_array[TEST_ARRAY_SIZE];
+    for(int i = 0; i < TEST_ARRAY_SIZE; i++)
+        input_array[i] = i;
+    array_partback(&ar1, -sizeof(input_array));
+    r2l_memcpy(ar1.zero, input_array, TEST_ARRAY_SIZE, sizeof(int));
+    int i = 0;
+    if (TEST_ARRAY_SIZE)
+    do i++, printf("ar1[%3.d] = %d\n", i, ((int*)ar1.zero)[-i]);
+    while (i < TEST_ARRAY_SIZE);
 }
