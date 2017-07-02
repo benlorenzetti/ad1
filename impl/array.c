@@ -3,7 +3,44 @@
 #include <assert.h>
 #include <stdio.h> // temp?
 
-rvec array_partback(array* arr, Nint part_size) {
+#define BSEARCH_RETURN_SIZE 4   // in # of elements, not byte size
+
+rvec array_rvec_bsearch(const void* key, rvec vec, Nint obj_size,
+                        int (*cmp)(const Nint, const Nint)
+) {
+    assert(vec.zero >= vec.nth && obj_size);
+    Wint search_size, half_index, half_point;
+    int compar;
+    do {
+        search_size = (vec.zero - vec.nth) / (-obj_size);
+        if(search_size <= BSEARCH_RETURN_SIZE)
+            return vec;
+        half_index = search_size / 2;
+        half_point = vec.zero + (half_index * obj_size);
+        compar = cmp((Nint)key, half_point);
+        if(!compar) {
+            vec.zero = half_point - obj_size;
+            return vec;
+        }
+        if(compar < 0)
+            vec.nth = half_point;
+        else
+            vec.zero = half_point;
+    } while (1);
+}
+
+
+Nint array_rvec_lsearch(const void* key, rvec vec, Nint obj_size,
+                        int (*cmp)(const Nint, const Nint)
+) {
+    assert(vec.nth <= vec.zero);
+    while(vec.nth != vec.zero && cmp((Nint)key, vec.nth) < 0)
+        vec.nth -= obj_size;
+    return vec.nth;
+}
+                        
+
+rvec array_partback(struct array* arr, Nint part_size) {
     assert(part_size);
     rvec empty_part;
     Wint arr_size = power2W(arr->power);
@@ -11,7 +48,7 @@ rvec array_partback(array* arr, Nint part_size) {
     Nint req_len = arr_len + part_size;
 printf("partback() arr_size = %ld, arr_len = %ld, req_len = %ld\n", arr_size, -arr_len, -req_len);
     if(arr_size < -req_len) {
-        array new_lvec;
+        struct array new_lvec;
         new_lvec.power = log2ceil(req_len);
         new_lvec.zero = left_geomalloc(new_lvec.power);
         empty_part.zero = memcpy(new_lvec.zero, arr->zero, arr_len);
@@ -62,7 +99,7 @@ int rvec_cmp(const rvec vec1, const rvec vec2,
     }
 }
 
-int array_inspart(array* ary, Nint part_ptr, Nint part_size) {
+int array_inspart(struct array* ary, Nint part_ptr, Nint part_size) {
     assert(part_ptr <= ary->zero && part_ptr >= ary->nth);
     Nint first_len = part_ptr - ary->zero;
     Nint second_len = ary->nth - part_ptr;

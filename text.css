@@ -42,11 +42,14 @@ ol {
 }
 
 hr {
+    margin-top: 2em;
 	margin-bottom: 0;
 	padding-bottom: 0;
 }
 
 hr.thought-divider {
+    margin-top: 1em;
+    margin-bottom: 1em;
 	margin-left: 12em;
 	margin-right: 12em;
 }

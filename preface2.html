@@ -8,7 +8,6 @@
 <body>
 
 <section>
-<hr>
 <h1>Preface</h1>
 <p class="blockquote">
 The church says the earth is flat; but I have seen its shadow
@@ -24,10 +23,6 @@ word&mdash;joy.
 <a class="blockquote-citation">&mdash; Yuri Gagarin</a>
 </p>
 <p class="blockquote">
-The scenery was very beautiful. But I did not see The Great Wall.
-<a class="blockquote-citation">&mdash; Yang Liwei, China's first
-astronaut.</a>
-<p class="blockquote">
 That's one small step for man, one giant leap for mankind.
 <a class="blockquote-citation">
 &mdash; Neil Armstrong</a>
@@ -36,10 +31,11 @@ That's one small step for man, one giant leap for mankind.
 <p class="chapter-first">
 This book is about language, specifically a systems programming
 language called Ad1, but also about human language and celebrating
-the great works of Computer Science, and of human civilization.
-For millenia humans have tried to describe their world, from flat,
-to round, to beyond. Similarly Ad1 is a language for describing a
-digital world and building great cities in memory.
+the great works of human civilization.
+For millenia humans have endeavored to describe their world,
+from flat, to round, to beyond.
+Similarly, Ad1 is a language for describing a
+discrete, circular world and organizing great enterprises there.
 </p>
 <p class="chapter-second"></p>
 
@@ -48,31 +44,33 @@ digital world and building great cities in memory.
 <section>
 <h2>Bigtalk</h2>
 <p class="section-first">
-The real world is infinite in space,
+The &#8477;eal world is infinite in space,
 complexly interconnected, and evolves through the arrow of time;
 while computers are finite in memory,
-have only a few actors, and proceed discretely
-through time. Then, programming is the art of describing and
-modeling the &#8477;eal world in finite digital computers. We model
-war, science, economics, human relationships, and we navigate,
+have only a few actors, and proceed incrementally
+through time. Then, programming is the art of depicting
+the real world in finite digital computers. We model
+war, science, economics, relationships, and we navigate,
 drive, automate, even fly in space!
-And while the models may live in computer memory, its relationship
-to the real world lives in programmers' minds and our imagination.
+And while a program may live in computer memory, its relationship
+to the world lives in programmers' minds and our imagination.
 </p>
 <p> This mental mapping, from real to discrete, is difficult and
 requires all the techniques for managing complexity and communicating
-values and operations like other professional fields in science,
-math, and engineering. Further, programmers are not insulated from
-the real world and we have (varying levels of) responsibility to
-learn from the great works and great mistakes of history.
+values and operations found in other professional fields in science,
+math, and engineering. Further, professional programmers are not
+insulated from the real world and we have (varying levels of)
+responsibility to learn from the great works and great mistakes of
+history. A good programming environment helps.
 </p>
 <p> Written text, with occasional object and control flow diagrams,
-is still the best media for depicting our abstract views onto computer
-memory, for the same reasons written speech and mathematics has been
-used for millenias:
+is still the best media for projecting our abstract views onto
+computer memory, for the same reasons written speech and mathematics
+has been used for millenias, namely:
 <ol>
-    <li>It forces you to serialize and organize your thoughts.</li>
-    <li>Words and symbols can change and grow in meaning from their
+    <li>Written language forces you to serialize and organize your
+    thoughts.</li>
+    <li>Words and symbols can change and grow in meaning with their
     context.</li>
     <li>From a finite set of sounds we can form endless words,
         whose meanings are not fixed but evolve over time.</li>
@@ -81,27 +79,31 @@ To demonstrate the power of written speech, the two of the greatest
 calls to action in modern western civilization are reproduced at the
 end of this chapter.
 </p>
-<p> There is an additional symmetry, why painting the real world in
-memory should use written text as a medium: spoken language is
-naturally serial and self-referencing, just as processors execute
-machine words sequentially and procedurally. As the objects
-and ideas in real life are limitless, so are the <em>symbols</em> in
-our language.
+<p> There is an additional symmetry, why a painting of the
+real world in memory should use written text as medium: spoken
+language is naturally serialized and self-referencing, just as
+processors execute machine words sequentially and procedurally.
+As the objects and ideas in real life are limitless, so are the
+<em>symbols</em> in human language.
 As the memory and operations in a computer are finite, so are the
 <em>words</em> in its instruction set.
 Just as programmers map real to discrete, so do programming languages
-map the infinite expressions to finite instructions.
+map an infinite set of symbolic expressions to finite
+instructions.
 </p>
 
 <hr class="thought-divider">
 
-<p> It is common for books about languages to emphasize a some
+<p> Finally, it is common for books about languages to emphasize some
 programming paradigm, and I like the idea of
 <em>literate programming</em>.
 You are in command and control of memory and I/O, but you should be
-careful to describe what it means through text, some imagery, and
+careful to describe what it means through text and by
 evolving your language with new types, concepts, and transformations.
-It becomes an addiction. Napoleon said, <span class="spanquote">
+There should also be a way to embed simple figures in code.
+Bigtalk is having command of all the processors and being articulate
+about their memories. It becomes an addiction;
+Napoleon said, <span class="spanquote">
 ``I love power. But it is as an artist that I love it. I love it as
 a mussician loves his violin, to draw out its sounds and chords and
 harmonies.''</span>
@@ -109,8 +111,8 @@ harmonies.''</span>
 </section>
 
 <section>
+<hr>
 <h1>About the Cover</h1>
-
 <p class="blockquote">
 And they said, ``Come, let us build ourselves a city, and a tower 
 whose top <em>is</em> in the heavens; let us make a name for
@@ -131,8 +133,8 @@ now nothing that they propose to do will be withheld from them.''
 <p class="chapter-first">
 Silicon is the ultimate substrate upon which to build a new
 world&mdash;a world where science is more conducted by deductive
-reasoning but which is well ordered that induction may also
-thrive. A world where art is dancing shapes in our memories and
+reasoning, but which also is well ordered that induction may
+thrive. A world where art is dancing shapes in our memory and
 where philosophy is abound in dualities. A new program where bits
 black and white stand together and paint 16-bit color and play
 192kHz sound.
@@ -150,27 +152,30 @@ from three prior languages: C for its unobstructed view of the
 machine and Linux, C++ for generic type concepts and the STL,
 and Lisp for designing an interactive compiler.
 </p>
-<p> Although the genealogic tree of programming languages continues
-to grow more scattered and confused, at the same time hardware 
-architectures have been converging since the incarnation of C.
+<p> Although the genealogy of programming languages continues to
+grow more scattered and confused, at the same time hardware 
+architecture has been converging since the the early days of C.
 Ad1 can now assume a little endian machine, a downward growing
 procedural call stack, two's complement arithmetic,
-some UTF-8 support, words size sufficient to address memory,
+some UTF-8 support, word sizes sufficient to address memory,
 and resources for more a complex compiler.
 </p>
-<p> There have also been many new ideas incorporated in programming
-languages, and some have been judiciously borrowed for Ad1, including
+<p> There have also been many new ideas incorporated in computer
+languages, and some have been judiciously borrowed for Ad1,
+<em>including</em>
 transposable struct &cross; array combinations, type concepts from
 <em>Elements of Programming</em> by Stepanov, linear/transactional
-types from Girard for helping track memory management, natural
-numbers from digital signal processing, inheritence through symbols, 
-s-like compiler expressions from Lisp, etc.
-Not including text preprocessor, std malloc() interface, RAII,
-inheritence through object classes, not really exceptions,
+types inspired by Girard and Rust, for helping track memory
+management, natural numbers from digital signal processing,
+inheritence through symbols, s-like compiler expressions from Lisp,
+etc.
+But <em>not including</em> text preprocessor, std malloc() interface,
+RAII, inheritence through object class trees, not really exceptions,
 and not exclusively prefix notation.
 </section>
 
 <section>
+<hr>
 <h2>I've Been to the Mountaintop</h2>
 <p class="section-first">
 Rev. Dr. Martin Luther King Jr.<br>

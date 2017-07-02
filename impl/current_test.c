@@ -4,13 +4,17 @@
 #include "pivlib.h"
 #include "array.h"
 
-#define TEST_ARRAY_SIZE 5
+#define TEST_ARRAY_SIZE 50
 
 int char_compare(Nint a, Nint b) {
 //    Wchar* aptr = (Wchar*)a;
 //    Wchar* bptr = (Wchar*)b;
 //    printf("cmp '%c' to '%c'\n", *aptr, *bptr);
     return ((Wchar*)a)[0] - ((Wchar*)b)[0];
+}
+
+int int_compare(const Nint a, const Nint b) {
+    return ((int*)a)[0] - ((int*)b)[0];
 }
 
 int main() {
@@ -38,14 +42,20 @@ int main() {
     ustr_free(string1);
     ustr_free(string2);
 
-    array ar1 = {0,0,64};
+    array ar1 = ARRAY_INIT;
     int input_array[TEST_ARRAY_SIZE];
     for(int i = 0; i < TEST_ARRAY_SIZE; i++)
-        input_array[i] = i;
+        input_array[i] = i/2;
     array_partback(&ar1, -sizeof(input_array));
-    r2l_memcpy(ar1.zero, input_array, TEST_ARRAY_SIZE, sizeof(int));
+    r2l_memcpy(ar1.array.zero, input_array, TEST_ARRAY_SIZE, sizeof(int));
+
     int i = 0;
     if (TEST_ARRAY_SIZE)
-    do i++, printf("ar1[%3.d] = %d\n", i, ((int*)ar1.zero)[-i]);
+    do i++, printf("ar1[%3.d] = %d\n", i, ((int*)ar1.array.zero)[-i]);
     while (i < TEST_ARRAY_SIZE);
+
+    int search_key = 25;
+    rvec ins_range = array_rvec_bsearch(&search_key, ar1.rvec, -((Nint)sizeof(int)), int_compare);
+    Nint ins_ptr = array_rvec_lsearch(&search_key, ar1.rvec, -((Nint)sizeof(int)), int_compare);
+    printf("find/insertion point for key = %d is ar1[%ld] = %d\n", search_key, (-(ins_ptr - ar1.array.zero))/sizeof(int), ((int*)ins_ptr)[0]);
 }
