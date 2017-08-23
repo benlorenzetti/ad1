@@ -25,6 +25,7 @@ Nint NfromW(Wint);
 Nint memcpy(Nint, Nint, Nint);
 Nint r2l_memcpy(Nint, Wint, Wint, Wint);
 //   r2l_memcpy(dest, src, obj_count, obj_size) = rend of dest
+Wint r2r_memcpy(Wint, Wint, Wint, Wint);
 
 #endif
 

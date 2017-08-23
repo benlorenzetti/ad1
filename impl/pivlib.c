@@ -30,6 +30,14 @@ Nint r2l_memcpy(Nint dest, Wint src, Wint obj_count, Wint obj_size) {
     return dest_ptr;
 }
 
+Wint r2r_memcpy(Wint dest, Wint src, Wint obj_count, Wint obj_size) {
+    Wint bytes = obj_count * obj_size;
+    assert(((dest-src) >= bytes) || (src-dest) >= bytes);
+    Wchar *d, *s;
+    while(bytes--)
+        *d++ = *s++;
+    return (Wint)d;
+}
 
 Nint NfromW(Wint w) {
     return -w;
