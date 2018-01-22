@@ -5,7 +5,7 @@ body {
 section {
 	font-family: "Times New Roman", Times, serif;
 	font-size: 12pt;
-	width: 48em;
+	max-width: 48em;
 }
 
 /* Headings 1-3 are probably meaningful and use sans-serif font
@@ -73,6 +73,9 @@ a.blockquote-citation {
   margin-left: 20em;
 }
 
+span.set {
+    white-space: nowrap;
+}
 span.spanquote {
   font-style: italic;
 }
