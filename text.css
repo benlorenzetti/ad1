@@ -19,26 +19,15 @@ h1 { font-size: 18pt; margin-top: 0.25em; margin-bottom: 1.75em; padding: 0;}
 h2 { font-size: 14pt; }
 h6 { font-size: 12pt; margin-top: 1em; margin-bottom: 0.5em; }
 
-p.chapter-first {
-  text-indent: 0;
-  font-style: italic;
-}
-
-p.chapter-first::first-letter {
-  font-size: 18pt;
-  font-style: bold;
-}
-
-p.chapter-second { font-style: italic; }
-
-p.section-first {
-	text-indent: 0;
-}
-
 ol {
     text-indent: 0;
     margin-left: 4em;
     margin-right: 12em;
+}
+ol.chapter-first {
+    margin-left: 2em;
+    margin-right: 4em;
+    font-style: italic;
 }
 
 hr {
@@ -75,7 +64,28 @@ a.blockquote-citation {
 
 span.set {
     white-space: nowrap;
+    font-style: italic;
 }
 span.spanquote {
   font-style: italic;
 }
+
+p.chapter-first, p.chapter-second {
+  text-indent: 0;
+  font-style: italic;
+}
+p.chapter-first em, p.chapter-second em {
+    font-style: normal;
+}
+
+p.chapter-first::first-letter {
+  font-size: 18pt;
+}
+
+p.section-first {
+	text-indent: 0;
+}
+ol.chapter-first {
+    font-style: italic;
+}
+
