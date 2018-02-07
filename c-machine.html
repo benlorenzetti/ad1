@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>The Concrete Machine</title>
+	<title>Abstractions on the C-Machine</title>
 	<link rel="stylesheet" type="text/css" href="text.css">
 </head>
 
 <body>
 
 <section>
-<h1>The Concrete Machine</h1>
+<h1>Abstractions on the Concrete Machine</h1>
+<p class="blockquote">
+Music is a moral law. It gives soul to the universe, wings to
+the mind, flight to the imagination, and charm and gaiety to
+life and to everything.
+<a class="blockquote-citation">&mdash; Plato</a>
+</p>
 <p class="blockquote">
 At the king's command they removed from the quarry large blocks of
 high-grade stone to provide a foundation of dressed stone for the
@@ -18,22 +24,11 @@ the temple.
 <a class="blockquote-citation">
 &mdash; Kings 5:17-18</a>
 </p>
-<p class="blockquote">
-All the gold which is under or upon the earth is not enough
-to give in exchange for virtue.
-<a class="blockquote-citation">&mdash; Plato</a>
-</p>
-
-<p class="blockquote">
-Music is a moral law. It gives soul to the universe, wings to
-the mind, flight to the imagination, and charm and gaiety to
-life and to everything.
-<a class="blockquote-citation">&mdash; Plato</a>
-</p>
 
 <p class="chapter-first">
-Ideas and functions from math and hardware are reflected in our
-programming languages and have changed remarkably little since the
+Functions from math and hardware are reflected in our
+programming languages and have changed remarkably little in the later
+decades of computer science since the
 first digital machines and procedural languages like FORTRAN and
 ALGOL. This chapter describes the basic features of Ad1 in this
 context. In particular Ad1 is based on the C-machine, a near
@@ -51,14 +46,18 @@ modeling mathematics and other abstract notions.
 </ol>
 
 <p class="chapter-second">
-We start with a brief taxonomy of ideas, which is very succintly and completely described in
+We start with a brief taxonomy of abstractions&mdash;just ideas in our
+minds&mdash;which give useful meaning to the bits in memory and
+electric signals on the die. The scope of these ideas is tempered
+to the architecture of modern CPUs. A very succinct, organized compilation of
+abstract ideas can be found in
 <em>Elements of Programming</em> by Stepanov and McJones.
 </p>
 
 </section>
 
 <section>
-<h2>Modeling the Abstract and Concrete</h2>
+<h2>Abstract Ideas</h2>
 <p class="section-first">
 A <em>concrete entity</em> is an individual thing that may
 change with time and is ephemeral, coming into and out of existance.
@@ -67,14 +66,15 @@ One of an entity's most important attributes is its
 a thing over time. George Washington, Cincinnati, and the Galactic
 Republic are all examples of concrete entities.
 </p>
-<p> An <em>abstract entity</em> is something unchangable and eternal;
-sometimes it is difficult to isolate an entity from its identity or
-its value, such as in the number two,
-the color green, or middle C&mdash;these are abstract entities.
+<p> An <em>abstract entity</em> is something unchanging and eternal;
+sometimes it is difficult to isolate an entity from its identity, or
+its value, such as in the number two, the color green or middle
+C&mdash;these are abstract entities.
 An <em>abstract species</em> is a set of abstract
 entities similar in some way, satisfying some particular predicate.
-Examples of abstract species are colors, whole numbers &#120142;, and
-booleans <span class="set">&#120121; = {TRUE, FALSE}</span>.
+Examples of abstract species are visible light, audible sound and
+whole numbers &#120142;, natural numbers &#8469; and booleans
+<span class="set">&#120121; = {TRUE, FALSE}</span>.
 </p>
 <p> An <em>attribute</em> is a relation between a concrete entity and
 an abstract entity that describes some property, quality, or
@@ -97,7 +97,42 @@ which maps whole numbers to booleans.
 <figure>
     <img src="./figures/even-function.png">
 </figure>
-<p> A <em>procedure</em> is a sequence of instructions that 
+<p> A <em>datum</em> is a finite sequence of
+<span class="set">n</span> digits from a set
+<span class="set">D = {d &isin; &#120142; | d &lt; base}</span>
+where <span class="set">n, base &isin; &#8469;</span>. In a
+binary (base two) computer the only digits available are 0 and 1.
+</p>
+<p> A <em>well-defined value type</em> is a function mapping a set of
+datums to an abstract species, or alternatively a concrete species
+of identity attributes without aliases.
+A datum is called a <em>representation</em> of its entity and an
+entity is called the <em>interpretation</em> of a datum.
+We refer to a datum together with its interpretation, a
+<span class="set">(datum, entity)</span> pair, as a <em>value</em>.
+Examples of values are whole numbers represented in 8-bit, 2's
+complement format.
+</p>
+<figure>
+    <img src="./figures/value-types.png">
+</figure>
+<p> A value type is <em>properly partial</em> if its values come
+from a proper subset of abstract entities in the codomain, otherwise
+it is <em>total</em>, or <em>surjective</em>.
+A value type is <em>uniquely represented</em>, or <em>injective</em>,
+if and only if at most one value corresponds to
+each abstract entity. The value type
+<span class="set">&#120142;8</span> is uniquely represented but 
+not total, while the boolean type <span class="set">&#120121;n</span> 
+is total, but not uniquely represented if
+<span class="set">n &gt; 1</span>.
+</p>
+
+</section>
+<section>
+<h2>Functions and Procedures</h2>
+<p class="section-first">
+A <em>procedure</em> is a sequence of instructions that 
 transform one or more concrete entities into another set of
 output entities. A procedure is the concrete, computer version of a
 mathmatical function, but it is much less strict requirements.
@@ -118,7 +153,11 @@ because it touches the standard output object located on the static
 part of memory.
 </p>
 <p> Finally a <em>functional procedure</em> is a linear procedure
-that treats all its imputs as if they were values
+that treats all its inputs as if they were values
+<<<<<<< HEAD
+=======
+</p>
+>>>>>>> dbc46c498df09165bc2341afe01f3bb2d92e91d6
 
 </section>
 
