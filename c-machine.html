@@ -24,11 +24,20 @@ the temple.
 <a class="blockquote-citation">
 &mdash; Kings 5:17-18</a>
 </p>
+<p class="blockquote">
+We hold these truths to be self-evident, that all men are created
+equal, that they are endowed by their Creator with certain
+unalienable Rights, that among these are Life, Liberty and the
+pursuit of Happiness...
+<a class="blockquote-citation">
+&mdash; Declaration of Independence</a>
+</p>
+
 
 <p class="chapter-first">
 Functions from math and hardware are reflected in our
 programming languages and have changed remarkably little in the later
-decades of computer science since the
+decades of computer science, since the
 first digital machines and procedural languages like FORTRAN and
 ALGOL. This chapter describes the basic features of Ad1 in this
 context. In particular Ad1 is based on the C-machine, a near
@@ -46,18 +55,19 @@ modeling mathematics and other abstract notions.
 </ol>
 
 <p class="chapter-second">
-We start with a brief taxonomy of abstractions&mdash;just ideas in our
-minds&mdash;which give useful meaning to the bits in memory and
-electric signals on the die. The scope of these ideas is tempered
-to the architecture of modern CPUs. A very succinct, organized compilation of
-abstract ideas can be found in
-<em>Elements of Programming</em> by Stepanov and McJones.
+We start by hashing out some fundamental abstractions&mdash;just
+ideas in our collective minds&mdash;which give useful meaning to
+the bits in memory and electric signals on the die.
+The scope of these ideas is tempered to the architecture of
+modern CPUs. A very succinct, organized compilation of abstract
+ideas can be found in <em>Elements of Programming</em> by
+Stepanov and McJones.
 </p>
 
 </section>
 
 <section>
-<h2>Abstract Ideas</h2>
+<h2>Unaliasable and Natural Ideas</h2>
 <p class="section-first">
 A <em>concrete entity</em> is an individual thing that may
 change with time and is ephemeral, coming into and out of existance.
@@ -91,31 +101,43 @@ or more abstract entities from corresponding species, i.e.
 abstract entity called the <em>result</em> from the
 <em>Codomain</em>. A <em>predicate function</em> has a result that
 is either true or false. An example is the even function,
-<span class="set">even: &#120142; &#8594; &#120121;</span>,
+<span class="set">even?: &#120142; &#8594; &#120121;</span>,
 which maps whole numbers to booleans.
 </p>
 <figure>
     <img src="./figures/even-function.png">
 </figure>
-<p> A <em>datum</em> is a finite sequence of
+<p> A <em>datum</em> is a well-ordered, finite sequence of
 <span class="set">n</span> digits from a set
-<span class="set">D = {d &isin; &#120142; | d &lt; base}</span>
+<span class="set">D = {dn &isin; &#120142; | d &lt; base}</span>
 where <span class="set">n, base &isin; &#8469;</span>.
 In a binary (base two) computer the only digits available are 0 and 1.
 </p>
-<p> A <em>well-defined value type</em> is a function mapping a set of
-datums to an abstract species, or alternatively a concrete species
-of identity attributes without aliases.
-A datum is called a <em>representation</em> of its entity and an
-entity is called the <em>interpretation</em> of a datum.
-We refer to a datum together with its interpretation, a
-<span class="set">(datum, entity)</span> pair, as a <em>value</em>.
-Examples of values are whole numbers represented in 8-bit, 2's
-complement format.
+<p> A <em>well-defined value type</em>, or a <em>hash map</em>,
+is a function mapping a set of datums to an abstract species,
+or alternatively a concrete species of identity attributes without
+aliases. A datum is called a <em>representation</em> of its entity
+and an entity is called the <em>interpretation</em> of a datum.
+We refer to a <span class="set">(datum, entity)</span> pair&mdash;a
+datum together with its interpretation,  as a <em>value</em>.
+Examples of values are whole numbers and booleans represented in
+8-bit, 2's complement format.
 </p>
 <figure>
     <img src="./figures/value-types.png">
 </figure>
+<p> If there is a pattern to the values, we can express the value
+type function more consisely and completely than
+with an arrow map. The function for whole numbers is a unit
+power series
+</p>
+<figure>
+    <img src="whole-numbers-power-series">
+</figure>
+<p class="continuation">
+which is guaranteed to converge because <span class="set">n</span>
+is finite.
+</p>
 <p> A value type is <em>properly partial</em> if its values come
 from a proper subset of abstract entities in the codomain, otherwise
 it is <em>total</em>, or <em>surjective</em>.
@@ -127,7 +149,17 @@ not total, while the boolean type <span class="set">&#120121;n</span>
 is total, but not uniquely represented if
 <span class="set">n &gt; 1</span>.
 </p>
-
+<p> A datum is <em>well formed</em> with respect to its value
+type if and only if the datum represents an abstract entity.
+For example an IEEE 754 floating-point NaN is not well formed when
+interpreted as as a real number.
+</p>
+<p> A value type is <em>not well-defined</em>, or <em>ambiguous</em>,
+if and only if a datum of the type has more than one interpretation.
+Ambiguity is sometime also called <em>aliasing</em>.
+The value type <span class="set">&#120142;8</span> may be ambiguous
+depending on the context in which it is used.
+</p>
 </section>
 <section>
 <h2>Functions and Procedures</h2>
