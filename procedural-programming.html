@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Procedural Programming</title>
+	<link rel="stylesheet" type="text/css" href="text.css">
+</head>
+
+<body>
+
+<section>
+<h1>Procedural Programming</h1>
+<p class="blockquote">
+We hold these truths to be self-evident, that all men are created
+equal, that they are endowed by their Creator with certain
+unalienable Rights, that among these are Life, Liberty and the
+pursuit of Happiness...
+<a class="blockquote-citation">
+&mdash; U.S. Declaration of Independence</a>
+</p>
+
+<p class="chapter-first">
+The only difference between computer science and math is one of
+wealth and work.
+A computer's limits are a finite memory and a potentially unbounded
+time for computation, whereas math has an infinite
+undiscovered memory from which computations can be found
+instantaneously, simultaneously (if only you know where to look).
+</p>
+
+</section>
+
+<section id="value-abstraction">
+<h2>Poor Man's Functions</h2>
+<p class="section-first">
+A <em>procedure</em> is <em>defined</em> by a weak, partially
+ordered set of statements and operations transforming one or more
+existing concrete entities into another set of output entities and
+utilizing stacks to automate entity and identity creation and
+elimination.
+</p>
+<p> A <em>statement</em> is a <em>declaration</em> of a new entity
+that the compiler will automatically allocate space
+(and thus identity) for or is a <em>storing</em> of some attribute of
+the entity, such as its object type or initial value.
+An <em>operation</em> is the application of a previously declared,
+and at some point defined, procedure.
+An <em>expression</em> is a hierarchial set of operations reducing
+input entities to output entities.
+Statements are expressions that are executed by the compiler.
+Single line expressions are composed into larger expressions with
+list and range operators such as <span class="set">, ; ( ) {</span>
+and <span class="set">}</span>.
+</p>
+<p> Procedure definitions and procedure objects are finite and are
+delimited by either paired set braces <span class="set">{}</span>,
+or by the beginning and end of a script file.
+However procedures may have infinite runtimes because their weak
+order allows goto intstructions forming execution loops.
+A procedure is the concrete, computer digilog of a mathmatical
+function, but in general has less stringent requirements:
+
+<p> A <em>flat procedure</em> defines generic operations to modify
+previously known, existing entities but does not shift the stack frame
+at runtime. It does not have a specific type signature but it is
+always a <em>transformation</em> operation, which is reflected in
+its syntax.
+</p> 
+<p> An Ad1 <em>procedure</em> binds a flat definition to a name
+and a  pair of stack object types, called the <em>procedure type</em>
+with elements separated by the arrow of time.
+A procedure is called an <em>open procedure</em> if it also
+touches objects at the base of the stack (global variables) or
+otherwise is <em>closed</em> if all input and output objects are
+passed automatically at runtime on the end of the stack.
+</p>
+<p> A <em>linear procedure</em> restores to procedures the property
+of functions that equal input combinations map consistently to
+equal outputs. A procedure is provably linear if it is closed and
+its input and output objects are regular types.
+For all procedures, linear arrow types allow the programmer to
+reason about stately resources: what members of the input object are
+returned modified in the output set?
+</p>
+<p> Finally a <em>functional procedure</em> is a linear procedure
+that treats all its inputs as if they were values; i.e. all inputs
+are passed either by copying or by constant references.
+
+</p>
+</section>
+
+
+</body>
+</html>
