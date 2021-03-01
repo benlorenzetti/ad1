@@ -11,4 +11,7 @@ int main () {
   geofree(memory2, -32);
   geofree(memory3, -32);
   print_malloc_metadata();
+  Uint big = 31;
+  printf("log2floor()=%u\n", log2floor(big));
+  printf("log2ceil()= %u\n", log2ceil(-big));
 }

@@ -25,7 +25,6 @@ void print_malloc_metadata() {
 }
 
 Nint geomalloc(Uchar power) {
-
     Nint malloc_ptr = (Nint) malloc(1 << power);
     Nint rend = malloc_ptr;
     Nint len = -(1 << power);
@@ -49,7 +48,6 @@ Nint geomalloc(Uchar power) {
         len = -(1 << (power+1));
       }
     }
-
     // Save metadata for malloc implementations that don't align on 2^u
     malloc_list* new_metadata = malloc(sizeof(malloc_list));
     new_metadata->next = malloc_metadata;
@@ -57,7 +55,6 @@ Nint geomalloc(Uchar power) {
     new_metadata->actual_len = len;
     new_metadata->revealed_ptr = rend;
     malloc_metadata = new_metadata;
-
     return rend;
 }
 
@@ -81,6 +78,7 @@ void geofree(Nint rend, Nint length) {
     } while (ptr->revealed_ptr != rend);
     prev->next = ptr->next;
   }
+  assert(ptr->actual_len == length || ptr->actual_len == 2*length);
   free((void*) ptr->actual_ptr);
   free((void*) ptr);
 }
@@ -113,26 +111,25 @@ Uint r2r_memcpy(Uint dest, Uint src, Uint obj_count, Uint obj_size) {
     return (Uint)d;
 }
 
-
-Nint NfromU(Uint w) {
-    return -w;
+Uint bitwise_rotr0(Uint u, Nchar r) { return u >> (-r); }
+Nint bitwise_rotr1(Nint n, Uchar r) {
+  Nint mask = ((!r) ? 0 : (-1) << (8*sizeof(Nint)-r));
+  return mask | n >> r;
 }
 
-Uchar log2floor(Nint n) {
-    assert(n);
-    n = ~n;
-    Uchar rot_count = -1;
-    do n = n >> 1, rot_count++;
-    while(n);
-    return rot_count;
+Uchar log2floor(Uint u) {
+    assert(u);
+    Nchar test_digit = -1;
+    while(bitwise_rotr0(u, test_digit))
+      --test_digit;
+    return ~test_digit;
 }
 
 Uchar log2ceil(Nint n) {
-    Uchar floor = log2floor(n);
-    if(n == power2N(floor))
-        return floor;
-    else
-        return 1 + floor;
+    Uchar test_digit = 0;
+    while(~bitwise_rotr1(n, test_digit))
+      ++test_digit;
+    return test_digit;
 }
 
 Nint power2N(Uchar n) {
