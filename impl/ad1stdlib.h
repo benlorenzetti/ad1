@@ -9,18 +9,29 @@ typedef uintptr_t Nint;
 typedef unsigned char Uchar;
 typedef unsigned char Nchar;
 
-Uchar log2floor(Nint);
+typedef struct slice {
+  Nint nth;
+  Nint zero;
+} slice;
+
+typedef struct alloc {
+  Nint ptr;
+  Nint len;
+} alloc;
+
+Uchar log2floor(Uint);
 Uchar log2ceil(Nint);
 Nint power2N(Uchar);
 Uint power2U(Uchar);
 Uint bitwise_rotr0(Uint, Nchar);
 Nint bitwise_rotr1(Nint, Uchar);
-Nint geomalloc(Uchar);
-void geofree(Nint, Nint); // ptr, length
+alloc geomalloc(Uchar);
+void geofree(alloc);
 void print_malloc_metadata();
-Nint l2l_memcpy(Nint, Nint, Nint);
-Nint r2l_memcpy(Nint, Uint, Uint, Uint);
-//   r2l_memcpy(dest, src, obj_count, obj_size) = rend of dest
-Uint r2r_memcpy(Uint, Uint, Uint, Uint);
+//   l2l_memcpy(dest_lend, src slice) -> rend of dest
+Nint l2l_memcpy(Nint, slice);
+//   r2l_memcpy(dest_lend, src, obj_count, obj_size) -> rend of dest
+Nint r2l_memcpy(Nint, Nint, Nint, Uint);
+Uint r2r_memcpy(Nint, Nint, Nint);
 
 #endif

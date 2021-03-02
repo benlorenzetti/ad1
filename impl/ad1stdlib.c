@@ -24,91 +24,83 @@ void print_malloc_metadata() {
   }
 }
 
-Nint geomalloc(Uchar power) {
+alloc geomalloc(Uchar power) {
     Nint malloc_ptr = (Nint) malloc(1 << power);
-    Nint rend = malloc_ptr;
-    Nint len = -(1 << power);
-    Nint power_end = len & malloc_ptr;
+    alloc r = {malloc_ptr, power2N(power)};
+//    Nint rend = malloc_ptr;
+//    Nint len = -(1 << power);
+    Nint power_end = r.len & r.ptr;
     // Check the allocation is correctly aligned by power of 2
     if(malloc_ptr != power_end) {
       // Try to globally shift malloc to a power of two
-      Nint left_gap = len - (power_end - malloc_ptr);
-      Nint old_location = malloc_ptr;
-      malloc_ptr = (Nint) realloc((void*)malloc_ptr, -(len + left_gap));
-      if(malloc_ptr == old_location) {
-        power_end = len & malloc_ptr;
-        rend = power_end - len;
-        len = len + left_gap;
+      Nint left_gap = r.len - (power_end - r.ptr);
+      malloc_ptr = (Nint) realloc((void*)r.ptr, -(r.len + left_gap));
+      if(malloc_ptr == r.ptr) {
+        r.ptr = power_end - r.len;
+        r.len = r.len + left_gap; // warning: this alloc no longer power of 2
       }
       else {
         // Just get this allocation done
         malloc_ptr = (Nint) realloc((void*)malloc_ptr, 1 << (power+1));
-        power_end = len & malloc_ptr;
-        rend = power_end - len;
-        len = -(1 << (power+1));
+        power_end = r.len & malloc_ptr;
+        r.ptr = power_end - r.len;
+        r.len = power2N(power+1);
       }
     }
     // Save metadata for malloc implementations that don't align on 2^u
     malloc_list* new_metadata = malloc(sizeof(malloc_list));
     new_metadata->next = malloc_metadata;
     new_metadata->actual_ptr = malloc_ptr;
-    new_metadata->actual_len = len;
-    new_metadata->revealed_ptr = rend;
+    new_metadata->actual_len = r.len;
+    new_metadata->revealed_ptr = r.ptr;
     malloc_metadata = new_metadata;
-    return rend;
+    r.len = power2N(power); // revealed len
+    return r;
 }
 
-void geofree(Nint rend, Nint length) {
+void geofree(alloc a) {
   malloc_list* ptr = malloc_metadata;
   malloc_list* prev = 0;
-  if (!ptr) {
-    printf("ERROR GEOFREE\n");
-    exit(0);
-  }
-  if (ptr->revealed_ptr == rend)
+  assert(ptr);
+  a.ptr = a.ptr & a.len;
+  if (ptr->revealed_ptr == a.ptr)
     malloc_metadata = ptr->next;
   else {
     do {
       prev = ptr;
       ptr = ptr->next;
-      if (!ptr) {
-        printf("ERROR GEOFREE\n");
-        exit(0);
-      }
-    } while (ptr->revealed_ptr != rend);
+      assert(ptr);
+    } while (ptr->revealed_ptr != a.ptr);
     prev->next = ptr->next;
   }
-  assert(ptr->actual_len == length || ptr->actual_len == 2*length);
+  assert(ptr->actual_len <= a.len || ptr->actual_len >= 2*a.len);
   free((void*) ptr->actual_ptr);
   free((void*) ptr);
 }
 
-Nint l2l_memcpy(Nint dest, Nint src, Nint length) {
-    assert( !(dest < src && dest >= (src+length)));
-    Uchar* dest_ptr = (Uchar*) dest;
-    Uchar* src_ptr = (Uchar*) src;
-    while(length++)
-        *(--dest_ptr) = *(--src_ptr);
-    return (Nint) dest_ptr;
+Nint l2l_memcpy(Nint dest, slice src) {
+  Nint len = src.nth - src.zero;
+  Nint dest_rend = dest + len;
+  assert(dest_rend >= src.zero || src.nth > dest); // no alias
+  memcpy(dest_rend, src.nth, -len);
+  return dest_rend;
 }
 
-Nint r2l_memcpy(Nint dest, Uint src, Uint obj_count, Uint obj_size) {
-    assert((dest - src) > obj_count * obj_size);
-    Nint dest_ptr = dest;
+Nint r2l_memcpy(Nint dest, Nint src, Nint obj_count, Uint obj_size) {
+    assert(obj_count);
+    assert((src - dest) <= 2 * obj_count * obj_size);
     do {
+        dest -= obj_size;
+        memcpy(dest, src, obj_size);
         src += obj_size;
-        dest_ptr = memcpy(dest_ptr, src, -obj_size);
-    } while (--obj_count);
-    return dest_ptr;
+    } while (++obj_count);
+    return dest;
 }
 
-Uint r2r_memcpy(Uint dest, Uint src, Uint obj_count, Uint obj_size) {
-    Uint bytes = obj_count * obj_size;
-    assert(((dest-src) >= bytes) || (src-dest) >= bytes);
-    Uchar *d, *s;
-    while(bytes--)
-        *d++ = *s++;
-    return (Uint)d;
+Nint r2r_memcpy(Nint dest, Nint src, Nint length) {
+    assert(dest - src <= length || src - dest <= length); // no alias
+    memcpy((void*)dest, (void*)src, -length);
+    return dest;
 }
 
 Uint bitwise_rotr0(Uint u, Nchar r) { return u >> (-r); }
