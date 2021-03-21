@@ -84,7 +84,7 @@ Nint l2l_memcpy(Nint dest, slice src) {
   Nint len = src.nth - src.zero;
   Nint dest_rend = dest + len;
   assert(dest_rend >= src.zero || src.nth > dest); // no alias
-  memcpy(dest_rend, src.nth, -len);
+  memcpy((void*)dest_rend, (void*)src.nth, -len);
   return dest_rend;
 }
 
@@ -93,7 +93,7 @@ Nint r2l_memcpy(Nint dest, Nint src, Nint obj_count, Uint obj_size) {
     assert((src - dest) <= 2 * obj_count * obj_size);
     do {
         dest -= obj_size;
-        memcpy(dest, src, obj_size);
+        memcpy((void*)dest, (void*)src, obj_size);
         src += obj_size;
     } while (++obj_count);
     return dest;

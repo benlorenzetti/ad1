@@ -1,3 +1,6 @@
+#ifndef AD1STRLIB_H
+#define AD1STRLIB_H
+
 #include "ad1stdlib.h"
 #include <string.h>
 #include <stdio.h>
@@ -87,12 +90,14 @@ iter str_alloc(string str, Nint append_len) {
 string str_realloc(string str, Nint append_len) {
   printf("str_realloc((%u, %u, %u], %u)\n", -str.nth, -str.iter.ptr, -str.iter.len, -append_len);
   string new;
+  new.nth = 0;
   new.iter = str_alloc(str, append_len);
   printf("new.iter = %u, %u\n", -new.iter.ptr, -new.iter.len);
   if(0 == iter_eq(new.iter, iter_0()))
     return str;
   // Copy to new string
   if(str.nth) {
+    printf("str_realloc copying from old string\n");
     new.nth = new.iter.ptr - new.iter.len;
     new.nth = l2l_memcpy(new.nth, str_1sthalf(str));
     new.nth = l2l_memcpy(new.nth, str_2ndhalf(str));
@@ -124,8 +129,8 @@ string string_cat(string dest, slice append) {
 
 slice str_1sthalf(string str) {
   slice slc = {0, 0};
-  // A first half exists if nth <= zero in N (but its size may be zero)
-  if(str.nth >= str.iter.ptr) {
+  // A first half exists if nth < zero in N (but its size may be zero)
+  if(str.nth > str.iter.ptr) {
     slc.zero = str.iter.ptr;
     slc.nth = str.iter.ptr & str.iter.len;
   }
@@ -166,9 +171,11 @@ slice str_spacea(string str) {
     return space;
   }
   alloc rend = iter2alloc(str.iter);
+  printf("spacea rend = %u, %u\n", -rend.ptr, -rend.len);
   if(!str.nth) {// empty of existing data
     space.nth = rend.ptr;
     space.zero = rend.ptr - rend.len;
+    printf("initially empty space = %u, %u\n", -space.zero, -space.nth);
     return space;
   }
   else if(str.iter.ptr > str.nth) {
@@ -208,11 +215,14 @@ slice str_move(slice dest, string* src) {
 }
 
 string str_splice(string left, slice right) {
-  assert(left.nth == right.zero);
+  printf("str_splice(%u, %u, %u, %u, %u)\n", -left.nth, -left.iter.ptr, -left.iter.len, -right.zero, -right.nth);
   left.nth = right.nth;
+  printf("str_splice(%u, %u, %u, %u, %u)\n", -left.nth, -left.iter.ptr, -left.iter.len, -right.zero, -right.nth);
   return left;
 }
 
 Nint str_len(string str) {
   return str.iter.len & (str.nth - str.iter.ptr);
 }
+
+#endif

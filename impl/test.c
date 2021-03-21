@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "ad1strlib.h"
+#include "ad1stdio.h"
 
 int main () {
   alloc memory = geomalloc(5);
@@ -22,7 +23,14 @@ int main () {
 
   FILE* tfile = fopen("lorem-ipsum.txt", "r");
   string s2 = str_init();
-
+  s2 = str_realloc(s2, -1000);
+  slice intermediate = str_spacea(s2);
+  printf("space available = %u, %u len %u\n", -intermediate.zero, -intermediate.nth, intermediate.zero-intermediate.nth);
+  intermediate = slc_read(intermediate, tfile, -1);
+  s2 = str_splice(s2, intermediate);
+  printf("1st half = %u, %u\n", -str_1sthalf(s2).zero, -str_1sthalf(s2).nth);
+  printf("2nd half = %u, %u\n", -str_2ndhalf(s2).zero, -str_2ndhalf(s2).nth);
+  print_str(stdout, str_2ndhalf(s2));
   fclose(tfile);
   str_dealloc(&s2);
 }
