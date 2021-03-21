@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Abstract Grammar of Ad1</title>
+	<title>Macro Programming</title>
 	<link rel="stylesheet" type="text/css" href="text.css">
 </head>
 
@@ -9,37 +9,44 @@
 
 <section>
 <hr>
-<h1>On the Grammar of Ad1</h1>
+<h1>Macro Programming</h1>
 <p class="chapter-first">
-Following the Linux ELF format for linkable machine code,
-symbols may be any length of any characters terminated by the null
-character; no characters are special besides that zero.
-All symbols and symbol classes in the language are defined in its
-current state. The base state includes script operators for adding
-new symbols, new symbol classes, and even new parsing precedences.
+Macro programming is
 </p>
 <p class="chapter-second">
 
 </p>
 <p class="blockquote">
+"Denial ain't just a river in Egypt."
+<a class="blockquote-citation">&mdash;Mark Twain</a>
+</p>
+<p class="blockquote">
 "Why are they going to disappear him?"<br>
 "I don't know. It doesn't make sense. It isn't even good grammar."
 <a class="blockquote-citation">&mdash;Joseph Heller, Catch-22</a>
-</p> 
+</p>
 
 </section>
 
 <section>
-<h2>Expression Trees</h2>
+<h2>Adi Syntax Tree</h2>
+<p class="section-first">The lexicon of Adi is defined by a symbol table,
+composed of referencable objects and alphabetized operators.
+The syntax of Ad1 is initially built up on a stack by LR parsing utilizing
+operator precedence, default left associativity and a special rule for
+right-associative recursive descent.
+This abstract syntax tree is composed of expressions for bottom-up evaluation
+and lists of statements for top down execution.
+</p>
 <p class="section-first">
 The goal the parser is to convert program text to a binary token tree,
-which can then be compared for equality, substituted, manipulated, 
+which can then be compared for equality, substituted, manipulated,
 and evaluated in subsequent stages of compilation.
 Parsing is concerned with symbols, syntax, and inflection;
 i.e. with recognizing temporal spacing, relative order, and function
 of symbols in text. It is not concerned with semantics, or meaning of
 symbols to the audience. For example,
-<span class="spanquote">``Denial ain't just a river in Egypt''</span> is syntactically correct despite making no sense because 
+<span class="spanquote">``Denial ain't just a river in Egypt''</span> is syntactically correct despite making no sense because
 <span class="spanquote">``denial''</span> is a noun, if not the
 right one.
 </p>
@@ -123,7 +130,7 @@ may also be a lexeme, which is an unclassified character string.
 <p> Recursive expressions are the most common form, consisting of
 a variable length, inflective arguement on the left, an operator
 placed as the parent node, and followed by a single expression
-to be placed as the right child arguement. The parser reads Ad1 
+to be placed as the right child arguement. The parser reads Ad1
 and hangs and classifies tokens from left-to-right and bottom-up,
 but the inflex_arg may not be fully classified until the reflexive
 operator is encountered.

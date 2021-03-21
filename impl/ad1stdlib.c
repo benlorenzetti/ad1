@@ -59,6 +59,8 @@ alloc geomalloc(Uchar power) {
 }
 
 void geofree(alloc a) {
+  if(alloc_eq(a, alloc_0()) == 0)
+    return;
   malloc_list* ptr = malloc_metadata;
   malloc_list* prev = 0;
   assert(ptr);
@@ -97,10 +99,18 @@ Nint r2l_memcpy(Nint dest, Nint src, Nint obj_count, Uint obj_size) {
     return dest;
 }
 
-Nint r2r_memcpy(Nint dest, Nint src, Nint length) {
-    assert(dest - src <= length || src - dest <= length); // no alias
-    memcpy((void*)dest, (void*)src, -length);
-    return dest;
+Nint r2r_memcpy(Nint dest, slice src) {
+    assert(dest >= src.zero || dest < src.nth + (src.nth - src.zero));
+    memcpy((void*)dest, (void*)src.nth, -(src.nth-src.zero));
+    return dest - (src.nth - src.zero);
+}
+
+slice slc_copy(slice dest, slice src) {
+  assert(dest.nth - dest.zero <= src.nth - src.zero);
+  if(dest.nth - dest.zero > src.nth - src.zero)
+    dest.nth = dest.zero + (src.nth - src.zero);
+  r2r_memcpy(dest.nth, src);
+  return dest;
 }
 
 Uint bitwise_rotr0(Uint u, Nchar r) { return u >> (-r); }
@@ -140,4 +150,66 @@ Uint power2U(Uchar n) {
                     // but it protects against compilers doing
                     // a modulo rotate.
     return (Uint)(1 << n);
+}
+
+Uint alloc_eq(alloc a, alloc b) {
+  if(a.len != b.len)
+    return -1;
+  else if(a.ptr != b.ptr)
+    return -1;
+  else
+    return 0;
+}
+
+alloc alloc_0() {
+  alloc r;
+  r.ptr = 0;
+  r.len = 0;
+  return r;
+}
+
+Uint slice_eq(slice a, slice b) {
+  if(!a.nth && !b.nth)
+    return 0;
+  else if(a.nth == b.nth && a.zero == b.zero)
+    return 0;
+  else
+    return -1;
+}
+
+Uint slice_0(slice a) {
+  if(a.nth)
+    return -1;
+  else
+    return 0;
+}
+
+alloc iter2alloc(iter i) {
+  alloc a;
+  a.ptr = i.ptr & i.len;
+  a.len = i.len;
+  return a;
+}
+
+iter alloc2iter(alloc a) {
+  iter i;
+  i.ptr = a.ptr;
+  i.len = a.len;
+  return i;
+}
+
+iter iter_0() {
+  iter i = {0, 0};
+  return i;
+}
+
+Uint iter_eq(iter a, iter b) {
+  if(a.ptr == b.ptr)
+    return 0;
+  else
+    return -1;
+}
+
+Nint slc_len(slice s) {
+  return s.nth - s.zero;
 }

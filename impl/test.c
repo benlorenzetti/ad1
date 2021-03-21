@@ -14,9 +14,15 @@ int main () {
   printf("log2floor()=%u\n", log2floor(big));
   printf("log2ceil()= %u\n", log2ceil(-big));
   string s1 = str_init();
-  s1 = fromCstr(&s1, "hello world!\n");
+  s1 = fromCstr(s1, "hello world!\n");
   print_str(stdout, str_2ndhalf(s1));
-  s1 = string_cat(&s1, str_2ndhalf(s1));
+  s1 = string_cat(s1, str_2ndhalf(s1));
   print_str(stdout, str_2ndhalf(s1));
-  str_zero(&s1);
+  str_dealloc(&s1);
+
+  FILE* tfile = fopen("lorem-ipsum.txt", "r");
+  string s2 = str_init();
+
+  fclose(tfile);
+  str_dealloc(&s2);
 }

@@ -1,19 +1,36 @@
 #include <stdio.h>
 #include "ad1stdlib.c"
 
-slice strread(slice, Uint, FILE*);
+string strread(string, Uint, FILE*);
 /* stdread(destination, element size, stream)
- * Returns a filled slice. If return and parameter slices have different size,
- * an error occured or EOF was reached (check ferror or feof).
+ * Copies over the given string without resizing its data length.
+ * (but treats) data length 0 ambiguously with allocation length.
+ * If return and parameter strings have different data lengths, an error
+ * occured or EOF was reached (check ferror or feof).
 */
 
-slice strread(slice dest, Nint size, FILE* stream) {
-  assert(dest.nth < dest.zero);
+
+
+string strread(string dest, Nint size, FILE* stream) {
+  assert(alloc_eq(iter2alloc(dest.alloc), alloc_0()));
+  if(dest.nth) {
+    dest.alloc.ptr = dest.alloc.ptr & dest.alloc.len;
+    dest.nth = dest.alloc.ptr;
+  }
+  alloc iter = dest.alloc;
+  int eof = 0;
   do {
-    dest.zero += size;
-    if(!fread(dest, -size, 1, stream)) {
-      dest.zero -= size;
-      break;
+    Nint prev = iter.ptr;
+    iter.ptr = iter.ptr & iter.len | ~iter.len & (iter.ptr + size);
+    if(!fread(iter.ptr, -size, 1, stream)) {
+      if(!eof)
+        dest.nth = 0;
+      else
+        dest.nth = prev;
+      return dest;
     }
-  } while(dest.zero != dest.nth);
+    ++eof;
+  } while(iter != dest.nth);
+  dest.nth = iter.ptr.
+  return dest;
 }
